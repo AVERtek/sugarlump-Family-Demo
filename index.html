@@ -75,7 +75,7 @@
         }
 
         #myModelViewer button[slot="ar-button"] {
-            display: none;
+            display: none; /* Keep the default button hidden */
         }
 
         .button-container {
@@ -119,7 +119,6 @@
 
         a { color: #59cbe8; text-decoration: none; font-weight: bold; }
         .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; }
-        .card h2 p { margin: 0; padding: 0; }
     </style>
 </head>
 
@@ -137,9 +136,9 @@
                 </video>
                 <model-viewer
                     id="myModelViewer"
-                    src="Models/entire_family_99cm.glb" 
+                    src="Models/entire_family_99cm.glb"
                     ios-src="Models/GIRL_converted.usdz"
-                    alt="Sugarlump Family"
+                    alt="A 3D model"
                     ar
                     ar-modes="scene-viewer quick-look"
                     camera-controls
@@ -148,6 +147,7 @@
                     ar-scale="auto"
                     ar-placement="floor"
                     interaction-prompt="none"
+                    autoplay
                     animation-name="Wave">
                     <button slot="ar-button" id="real-ar-button"></button>
                 </model-viewer>
@@ -193,18 +193,23 @@
             const playPauseIcon = document.getElementById('play-pause-icon');
             const customArTrigger = document.getElementById('custom-ar-trigger');
             
-            // Separate audio object for AR
-            const arAudio = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
+            // Initialize the separate audio object
+            const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
+            arSound.loop = true; 
+
             let isPlaying = false;
 
+            // Handle Video + Audio Playback
             function togglePlayPause() {
                 if (isPlaying) {
                     video.pause();
+                    arSound.pause(); 
                     video.muted = true;
                     playPauseIcon.src = 'images/play_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Play';
                 } else {
-                    video.play().catch(err => console.error("Autoplay blocked", err));
+                    video.play().catch(err => console.log("Video wait", err));
+                    arSound.play().catch(err => console.log("Audio wait", err));
                     video.muted = false;
                     playPauseIcon.src = 'images/pause_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Pause';
@@ -216,15 +221,18 @@
                 playPauseButton.addEventListener('click', togglePlayPause);
             }
 
-            // Launch AR Logic
+            // Launch AR and trigger sound
             if (customArTrigger) {
                 customArTrigger.addEventListener('click', () => {
-                    // Pause the main page video
+                    // Reset UI
                     video.pause();
                     video.muted = true;
                     isPlaying = false;
                     playPauseIcon.src = 'images/play_icon.png';
                     if(playPauseButton) playPauseButton.querySelector('strong').textContent = 'Play';
+
+                    // Play sound (Interaction ensures this is allowed)
+                    arSound.play().catch(err => console.log("Interaction required for audio", err));
 
                     if (modelViewer.canActivateAR) {
                         modelViewer.activateAR();
@@ -234,13 +242,10 @@
                 });
             }
 
-            // Audio logic for AR Session
+            // stop sound if they leave AR mode back to the browser
             modelViewer.addEventListener('ar-status', (event) => {
-                if (event.detail.status === 'session-started') {
-                    arAudio.play().catch(e => console.log("Audio play failed", e));
-                } else if (event.detail.status === 'not-presenting') {
-                    arAudio.pause();
-                    arAudio.currentTime = 0;
+                if (event.detail.status === 'not-presenting') {
+                    arSound.pause();
                 }
             });
         });
