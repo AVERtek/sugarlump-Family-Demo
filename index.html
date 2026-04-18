@@ -6,17 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>sugarlump-Amazon-Template</title>
 
-  <!-- model-viewer -->
   <script type="module" src="[ajax.googleapis.com](https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js)"></script>
-
-  <!-- Google tag (optional placeholder) -->
-  <script async src="[googletagmanager.com](https://www.googletagmanager.com/gtag/js?id=0-0000000000)"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '0-0000000000');
-  </script>
 
   <style>
     html, body {
@@ -90,7 +80,6 @@
       cursor: pointer;
       transition: background-color 0.3s ease, border-color 0.3s ease;
     }
-
     .action-button:hover { background-color: #f0f8ff; border-color: #48b0cc; }
 
     .action-button-text {
@@ -124,7 +113,6 @@
           Your browser does not support the video tag.
         </video>
 
-        <!-- ✅ WebXR + Quick Look only -->
         <model-viewer
           id="myModelViewer"
           src="Models/entire_family_99cm.glb"
@@ -145,44 +133,46 @@
       </div>
 
       <div style="text-align:center;">
-        <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight:bold; color:#000099;">Make Sure Sound is On!</p>
+        <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight:bold; color:#000099;">
+          Make Sure Sound is On!
+        </p>
       </div>
 
       <div class="button-container">
         <div class="action-button" id="play-pause-button">
-          <img id="play-pause-icon" src="images/play_icon.png" style="height:4em; width:auto; margin-right:5px;" alt="Play/Pause Icon">
+          <img id="play-pause-icon" src="images/play_icon.png" style="height:4em;width:auto;margin-right:5px;" alt="Play/Pause Icon">
           <span class="action-button-text"><strong>Play</strong></span>
         </div>
         <div class="action-button" id="ar-button">
-          <img src="images/Heart button.png" style="height:4em; width:auto; margin-right:5px;" alt="Custom AR Icon">
+          <img src="images/Heart button.png" style="height:4em;width:auto;margin-right:5px;" alt="Custom AR Icon">
           <span class="action-button-text"><strong>AR Press Here</strong></span>
         </div>
       </div>
 
       <div class="card">
-        <h2 style="font-family:'Chalet LondonNineteenEighty Regular'; color:#000099;">
+        <h2 style="font-family:'Chalet LondonNineteenEighty Regular';color:#000099;">
           Experience 4D Augmented Reality On Your Phone
         </h2>
-        <img src="images/erin_video_scenes-41.png" style="width:100%; max-width:350px;">
-        <h3 style="font-family:'Chalet LondonNineteenEighty Regular'; color:#000099; font-size:14px;">
+        <img src="images/erin_video_scenes-41.png" style="width:100%;max-width:350px;">
+        <h3 style="font-family:'Chalet LondonNineteenEighty Regular';color:#000099;font-size:14px;">
           <em>If AR button does not appear on mobile, use another browser.</em>
         </h3>
       </div>
 
       <div class="card" style="margin-top:20px;">
-        <img src="images/erin_video_scenes-34.png" style="width:300px; max-width:90%; margin-bottom:10px;">
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#ff69b4; font-size:20px;">
-          <b>about:</b> <a href="[sugarlump.love](https://sugarlump.love/about)" target="_blank">creativity + kindness</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#ff69b4; font-size:20px;">
-          <b>rewards:</b> <a href="[sugarlump.love](https://sugarlump.love/)" target="_blank">the kindness project</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#ff69b4; font-size:20px;">
-          <b>join:</b> <a href="[sugarlump.love](https://sugarlump.love/contact)" target="_blank">sugarlump kindness club</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#ff69b4; font-size:20px;">
-          <b>shop:</b> <a href="[sugarlump.love](https://sugarlump.love/shop)" target="_blank">creative kindness kits</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#ff69b4; font-size:20px;">
-          <b>brag tags:</b> <a href="[schoollife.com](https://www.schoollife.com/bragtags-intro)" target="_blank">accomplishment, recognition, confidence</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#ff69b4; font-size:20px;">
-          <b>sponsors:</b> <a href="[sugarlump.love](https://sugarlump.love/be-a-sponsor)" target="_blank">get involved</a></p></h2>
+        <img src="images/erin_video_scenes-34.png" style="width:300px;max-width:90%;margin-bottom:10px;">
+        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
+          <b>about:</b><a href="[sugarlump.love](https://sugarlump.love/about)" target="_blank"> creativity + kindness</a></p></h2>
+        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
+          <b>rewards:</b><a href="[sugarlump.love](https://sugarlump.love/)" target="_blank"> the kindness project</a></p></h2>
+        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
+          <b>join:</b><a href="[sugarlump.love](https://sugarlump.love/contact)" target="_blank"> sugarlump kindness club</a></p></h2>
+        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
+          <b>shop:</b><a href="[sugarlump.love](https://sugarlump.love/shop)" target="_blank"> creative kindness kits</a></p></h2>
+        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
+          <b>brag tags:</b><a href="[schoollife.com](https://www.schoollife.com/bragtags-intro)" target="_blank"> accomplishment, recognition, confidence</a></p></h2>
+        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
+          <b>sponsors:</b><a href="[sugarlump.love](https://sugarlump.love/be-a-sponsor)" target="_blank"> get involved</a></p></h2>
       </div>
     </div>
   </div>
@@ -195,17 +185,15 @@
     const playPauseIcon = document.getElementById('play-pause-icon');
     const arButton = document.getElementById('ar-button');
 
-    // Sound for 3D preview / WebXR mode
     const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
     arSound.loop = true;
     let isPlaying = false;
 
-    // Unlock audio on first tap
     const initAudio = () => {
       arSound.play().then(() => {
         arSound.pause();
         arSound.currentTime = 0;
-      }).catch(() => {});
+      }).catch(()=>{});
       window.removeEventListener('touchstart', initAudio);
       window.removeEventListener('click', initAudio);
     };
@@ -231,34 +219,40 @@
 
     if (playPauseButton) playPauseButton.addEventListener('click', togglePlayPause);
 
+    // Detect mobile device
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
     if (arButton) {
       arButton.addEventListener('click', async () => {
+        // Pause any ongoing animations/sound
         video.pause();
         video.muted = true;
+        arSound.pause();
         isPlaying = false;
         playPauseIcon.src = 'images/play_icon.png';
         playPauseButton.querySelector('strong').textContent = 'Play';
 
-        // Play web audio immediatly (stays active in WebXR)
-        try {
-          await arSound.play();
-        } catch (e) {
-          console.warn('Audio blocked until interaction:', e);
+        // Only proceed if mobile
+        if (!isMobile) {
+          alert("AR works only on mobile devices.");
+          return;
         }
 
-        if (modelViewer.canActivateAR) {
-          modelViewer.activateAR();
-        } else {
-          alert('AR is supported only on mobile devices.');
+        // Play web audio so it persists into WebXR
+        try { await arSound.play(); } catch (e) { console.warn('Audio play blocked:', e); }
+
+        // Activate AR (WebXR for Android, Quick Look for iOS)
+        try {
+          await modelViewer.activateAR();
+        } catch (err) {
+          console.error('AR activation failed:', err);
         }
       });
     }
 
-    // Maintain audio states
     modelViewer.addEventListener('ar-status', (event) => {
       const status = event.detail.status;
       if (status === 'presenting') {
-        // Quick Look (iOS) takes over; pause web audio
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) arSound.pause();
       } else if (status === 'not-presenting') {
         if (isPlaying) {
