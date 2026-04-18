@@ -22,23 +22,17 @@
 
         html, body { margin: 0; padding: 0; overflow-x: hidden; font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif; color: #244376; background-color: #ffff99; display: flex; flex-direction: column; align-items: center; }
         .container { max-width: 600px; width: 100%; box-sizing: border-box; padding: 0 10px; }
-        
         .card { background-color: #ffff99; border: 2px solid #ffff99; padding: 10px; margin: 0 0 1em 0; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 6px; position: relative; }
         
-        /* Layout matching the Second Code Block */
         .viewer-container { width: 100%; height: 400px; position: relative; background-color: #ffff99; border-radius: 12px; overflow: hidden; }
         #myVideo { width: 100%; height: 100%; position: absolute; top: 0; left: 0; object-fit: cover; z-index: 2; }
         #myModelViewer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         #myModelViewer button[slot="ar-button"] { opacity: 0; pointer-events: none; }
 
         .button-container { margin-top: 20px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; width: 100%; }
-        
-        /* Large Action Buttons from Target UI */
         .action-button { background-color: #ffffff; border-radius: 8px; border: 2px solid #59cbe8; height: 60px; min-width: 250px; display: flex; align-items: center; justify-content: center; padding: 10px; cursor: pointer; transition: background-color 0.3s ease; }
-        .action-button:hover { background-color: #f0f8ff; }
         .action-button-text { font-size: 26px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular'; white-space: nowrap; }
 
-        /* Secondary Button Stack */
         .main-button { background-color: #ffffff; border-radius: 8px; border: 2px solid #59cbe8; height: 42px; width: 300px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-top: 10px; box-sizing: border-box; }
         .main-button img { height: 28px; margin-right: 8px; }
 
@@ -64,6 +58,8 @@
                     ios-src="Models/GIRL_converted.usdz" 
                     ar ar-modes="webxr scene-viewer quick-look" 
                     camera-controls 
+                    autoplay
+                    animation-name="Wave"
                     poster="images/Poster_SN_Scene.png"
                     interaction-prompt="none">
                     <button slot="ar-button"></button>
@@ -85,11 +81,10 @@
         </div>
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 20px;">
-            <button id="record-mission-button" class="main-button" onclick="openRecordingTab()">
+            <button class="main-button" onclick="openRecordingTab()">
                 <img src="images/cartoon-phone_t.png" style="filter: hue-rotate(260deg);">
                 <span style="font-size: 18px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular';"><strong>record project</strong></span>
             </button>
-
             <button id="viewPrintCertificateButton" class="main-button">
                 <img src="images/sl_ribbon2.png" style="opacity: 0.8;">
                 <span style="font-size: 18px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular';"><strong>print certificate</strong></span>
@@ -129,16 +124,15 @@
             const playPauseIcon = document.getElementById('play-pause-icon');
             const arLaunchButton = document.getElementById('ar-launch-button');
             
-            // Audio setup from working code
             const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
             arSound.loop = true;
             let isPlaying = false;
 
-            // Logic to handle Play/Pause
             function togglePlayPause() {
                 if (isPlaying) {
                     video.pause();
                     arSound.pause();
+                    modelViewer.pause(); // Sync 2D animation
                     video.muted = true;
                     playPauseIcon.src = 'images/play_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Play';
@@ -146,17 +140,15 @@
                     video.muted = false;
                     video.play();
                     arSound.play();
+                    modelViewer.play(); // Sync 2D animation
                     playPauseIcon.src = 'images/pause_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Pause';
                 }
                 isPlaying = !isPlaying;
             }
 
-            if (playPauseButton) {
-                playPauseButton.addEventListener('click', togglePlayPause);
-            }
+            playPauseButton.addEventListener('click', togglePlayPause);
 
-            // AR Launch Logic
             arLaunchButton.addEventListener('click', () => {
                 video.pause();
                 video.muted = true;
@@ -164,8 +156,10 @@
                 playPauseIcon.src = 'images/play_icon.png';
                 playPauseButton.querySelector('strong').textContent = 'Play';
 
-                // Sync sound for AR
-                arSound.play().catch(err => console.log("Audio waiting for interaction"));
+                arSound.play().catch(err => console.log("Audio waiting"));
+                
+                // Explicitly tell model-viewer to play before launching AR
+                modelViewer.play();
 
                 if (modelViewer.canActivateAR) {
                     modelViewer.activateAR();
@@ -174,7 +168,16 @@
                 }
             });
 
-            // Certificate Logic from Working Code
+            // Ensure animation plays when entering AR
+            modelViewer.addEventListener('ar-status', (event) => {
+                if (event.detail.status === 'presenting') {
+                    modelViewer.play();
+                    arSound.play();
+                } else if (event.detail.status === 'not-presenting') {
+                    arSound.pause();
+                }
+            });
+
             document.getElementById('viewPrintCertificateButton').addEventListener('click', async () => {
                 const { PDFDocument, rgb, StandardFonts } = PDFLib;
                 try {
@@ -182,19 +185,13 @@
                     const pdfDoc = await PDFDocument.load(bytes);
                     const page = pdfDoc.getPages()[0];
                     const fontB = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-                    const certNo = Date.now().toString().slice(-8);
-                    
                     page.drawText("Tercek Real Estate Group", { x: 80, y: page.getSize().height - 230, size: 16, font: fontB, color: rgb(8/255, 119/255, 144/255) });
-                    page.drawText(`Certificate No: ${certNo}`, { x: 80, y: page.getSize().height - 250, size: 12, font: fontB });
-
                     const pdfData = await pdfDoc.save();
-                    const blob = new Blob([pdfData], { type: 'application/pdf' });
-                    window.open(URL.createObjectURL(blob), '_blank');
+                    window.open(URL.createObjectURL(new Blob([pdfData], { type: 'application/pdf' })), '_blank');
                 } catch (e) { alert("Error generating certificate."); }
             });
         });
 
-        // Recording Tab Logic from Working Code
         function openRecordingTab() {
             const recWin = window.open("", "_blank");
             recWin.document.write(`
@@ -207,11 +204,11 @@
                 .play-btn { background: #59cbe8; color: white; border-radius: 10px; font-size: 22px; font-weight: bold; border: none; cursor: pointer; padding: 15px 40px; margin-top: 15px; }
             </style></head>
             <body>
-                <model-viewer id="m" src="Models/entire_family_99cm.glb" poster="images/Poster_SN_Scene.png" camera-controls></model-viewer>
+                <model-viewer id="m" src="Models/entire_family_99cm.glb" poster="images/Poster_SN_Scene.png" autoplay animation-name="Wave" camera-controls></model-viewer>
                 <audio id="music" src="Sound/sweet_neighbor_of_mine3.mp3" loop></audio>
                 <div class="instr">
                     <p style="color: #ff69b4; font-weight: bold;">SCREEN RECORD YOUR MISSION</p>
-                    <button id="ctrl" class="play-btn" onclick="const a=document.getElementById('music'); if(a.paused){a.play(); this.innerText='PAUSE';}else{a.pause(); this.innerText='START';}">START SHOW</button>
+                    <button id="ctrl" class="play-btn" onclick="const a=document.getElementById('music'); const m=document.getElementById('m'); if(a.paused){a.play(); m.play(); this.innerText='PAUSE';}else{a.pause(); m.pause(); this.innerText='START';}">START SHOW</button>
                 </div>
             </body></html>`);
             recWin.document.close();
