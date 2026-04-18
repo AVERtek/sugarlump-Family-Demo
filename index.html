@@ -14,14 +14,13 @@
     <style>
         html, body { margin: 0; padding: 0; overflow-x: hidden; font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif; color: #244376; background-color: #ffff99; }
         .container { max-width: 600px; width: 100%; box-sizing: border-box; padding: 0 10px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
-        .card { background-color: rgb(255, 255, 153); border: 2px solid rgb(255, 255, 153); padding: 10px; margin-bottom: 1em; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 6px; overflow: hidden; width: 100%; box-sizing: border-box; }
+        .card { background-color: rgb(255, 255, 153); border: 2px solid rgb(255, 255, 153); padding: 10px; margin-bottom: 1em; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 6px; width: 100%; box-sizing: border-box; }
 
-        model-viewer { --progress-bar-color: #59cbe8; }
-        model-viewer#reveal { display: none; }
+        model-viewer { width: 100%; height: 0px; --progress-bar-color: #59cbe8; }
         
-        .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; }
-        .card h2 p { margin: 0; padding: 0; }
-
+        /* 0.5em spacing for links */
+        .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px; }
+        
         .main-button { 
             background-color: #ffffff; 
             border-radius: 8px; 
@@ -51,7 +50,7 @@
         <img src="images/erin_video_scenes-32.png" style="width: 350px; max-width: 100%; height: auto;">
     </div>
 
-    <model-viewer id="reveal" src="Models/entire_family_99cm.glb?sound=Sound/sweet_neighbor_of_mine3.mp3" ar ar-modes="scene-viewer webxr quick-look" ios-src="Models/GIRL_converted.usdz"></model-viewer>
+    <model-viewer id="reveal" src="Models/entire_family_99cm.glb?sound=Sound/sweet_neighbor_of_mine3.mp3" ar ar-modes="scene-viewer webxr quick-look" ios-src="Models/GIRL_converted.usdz" style="display:none;"></model-viewer>
     
     <p style="text-align:center; font-family: 'Chalet LondonNineteenEighty Regular'; font-weight: bold; color: #000099; font-size: 14px;">Make Sure Wi-Fi and Sound is On!</p>
 
@@ -76,12 +75,12 @@
     
     <div class="card" style="margin-top: 20px;">
         <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%; margin-bottom: 10px;">
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>about:</b><a href="https://sugarlump.love/about" target="_blank"> creativity + kindness</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>rewards:</b><a href="https://sugarlump.love/" target="_blank"> the kindness project</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>join:</b><a href="https://sugarlump.love/contact" target="_blank"> sugarlump kindness club</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>shop:</b><a href="https://sugarlump.love/shop" target="_blank"> creative kindness kits</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>brag tags:</b><a href="https://www.schoollife.com/bragtags-intro" target="_blank"> accomplishment, recognition, confidence</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>sponsors:</b><a href="https://sugarlump.love/be-a-sponsor" target="_blank"> get involved</a></p></h2>
+        <h2><b>about:</b> <a href="https://sugarlump.love/about" target="_blank">creativity + kindness</a></h2>
+        <h2><b>rewards:</b> <a href="https://sugarlump.love/" target="_blank">the kindness project</a></h2>
+        <h2><b>join:</b> <a href="https://sugarlump.love/contact" target="_blank">sugarlump kindness club</a></h2>
+        <h2><b>shop:</b> <a href="https://sugarlump.love/shop" target="_blank">creative kindness kits</a></h2>
+        <h2><b>brag tags:</b> <a href="https://www.schoollife.com/bragtags-intro" target="_blank">accomplishment, recognition, confidence</a></h2>
+        <h2><b>sponsors:</b> <a href="https://s.sugarlump.love/be-a-sponsor" target="_blank">get involved</a></h2>
         <br>
         <h1><p style="font-family: 'DaisyByhapppyal-Regular'; color: #000099; font-size: 20px;"><em> THIS KINDNESS PROJECT SPONSORED BY</em></p></h1>
         <img src="images/erin_video_scenes-37.png" style="width: 300px; max-width: 90%;">
@@ -156,29 +155,21 @@
                 const bytes = await fetch('certificates/sugarlump_app_certificate.pdf').then(res => res.arrayBuffer());
                 const pdfDoc = await PDFDocument.load(bytes);
                 const page = pdfDoc.getPages()[0];
-                const { height } = page.getSize();
                 const fontB = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
                 const fontR = await pdfDoc.embedFont(StandardFonts.Helvetica);
                 
                 const now = new Date();
-                const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-                const exp = new Date(); exp.setDate(now.getDate() + 31);
-                const expStr = exp.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
                 const certNo = Date.now().toString().slice(-8);
 
-                const x = 80; const baseY = height - 250;
+                const x = 80; const baseY = page.getSize().height - 250;
                 page.drawText("Tercek Real Estate Group", { x, y: baseY + 20, size: 16, font: fontB, color: rgb(8/255, 119/255, 144/255) });
                 page.drawText("Sweet Neighbor of Mine", { x, y: baseY, size: 16, font: fontB, color: rgb(254/255, 63/255, 178/255) });
                 page.drawText(`Certificate No: ${certNo}`, { x, y: baseY - 20, size: 12, font: fontR, color: rgb(8/255, 119/255, 144/255) });
-                page.drawText(`Download Date: ${dateStr}`, { x, y: baseY - 40, size: 12, font: fontR, color: rgb(8/255, 119/255, 144/255) });
-                page.drawText(`Valid until: ${expStr}`, { x, y: baseY - 60, size: 14, font: fontB, color: rgb(0.8, 0.2, 0.2) });
 
                 const pdfData = await pdfDoc.save();
                 const blob = new Blob([pdfData], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                const newWindow = window.open(url, '_blank');
-                if (!newWindow) alert('Please allow pop-ups.');
-            } catch (e) { alert("Error loading certificate template."); }
+                window.open(URL.createObjectURL(blob), '_blank');
+            } catch (e) { alert("Error loading certificate."); }
         });
 
         document.getElementById('ar-button').addEventListener('click', () => {
