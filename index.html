@@ -2,13 +2,12 @@
 <html lang="en-US">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>sugarlump sweet neighbor</title>
 
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    
+
     <style>
         @font-face { font-family: 'Chalet LondonNineteenEighty Regular'; src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype'); }
         @font-face { font-family: 'DaisyByhapppyal-Regular'; src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype'); }
@@ -17,13 +16,17 @@
         .container { max-width: 600px; width: 100%; box-sizing: border-box; padding: 0 10px; }
         .card { background-color: #ffff99; padding: 10px; margin-bottom: 1em; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 6px; position: relative; }
         
+        /* Direct-to-AR: Hidden viewer container */
         .viewer-container { width: 100%; height: 400px; position: relative; background-color: #ffff99; border-radius: 12px; overflow: hidden; }
         #myVideo { width: 100%; height: 100%; position: absolute; top: 0; left: 0; object-fit: cover; z-index: 2; }
-        #myModelViewer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        
+        /* Hide the 2D model preview but keep the viewer active for AR */
+        #myModelViewer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; pointer-events: none; }
         #myModelViewer button[slot="ar-button"] { display: none; }
 
         .button-container { margin-top: 20px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; width: 100%; }
-        .action-button { background-color: #ffffff; border-radius: 8px; border: 2px solid #59cbe8; height: 60px; min-width: 250px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .action-button { background-color: #ffffff; border-radius: 8px; border: 2px solid #59cbe8; height: 60px; min-width: 250px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s; }
+        .action-button:active { transform: scale(0.98); }
         .action-button-text { font-size: 26px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular'; }
 
         .main-button { background-color: #ffffff; border-radius: 8px; border: 2px solid #59cbe8; height: 42px; width: 300px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-top: 10px; }
@@ -37,7 +40,7 @@
 <body>
     <div class="container">
         <div class="card">
-            <img src="images/erin_video_scenes-32.png" style="width: 350px; max-width: 100%; height: auto;">
+            <img src="images/erin_video_scenes-32.png" style="width: 350px; max-width: 100%;">
         </div>
 
         <div class="card">
@@ -49,7 +52,8 @@
                     id="myModelViewer" 
                     src="Models/entire_family_99cm.glb" 
                     ios-src="Models/GIRL_converted.usdz" 
-                    ar ar-modes="webxr scene-viewer quick-look" 
+                    ar 
+                    ar-modes="webxr scene-viewer quick-look" 
                     camera-controls 
                     autoplay
                     animation-name="Wave"
@@ -75,7 +79,7 @@
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 20px;">
             <button class="main-button" onclick="openRecordingTab()">
                 <img src="images/cartoon-phone_t.png" style="filter: hue-rotate(260deg);">
-                <span style="font-size: 18px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular';"><strong>record project</strong></span>
+                <span style="font-size: 18px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular';"><strong>Project Recorder</strong></span>
             </button>
             <button id="viewPrintCertificateButton" class="main-button">
                 <img src="images/sl_ribbon2.png" style="opacity: 0.8;">
@@ -83,11 +87,8 @@
             </button>
         </div>
 
-        <div class="card">
-            <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%;">
-            <h2><b>about:</b> <a href="https://sugarlump.love/about" target="_blank">creativity + kindness</a></h2>
-            <h2><b>rewards:</b> <a href="https://sugarlump.love/" target="_blank">the kindness project</a></h2>
-            <h2><b>join:</b> <a href="https://sugarlump.love/contact" target="_blank">sugarlump kindness club</a></h2>
+        <div class="card" style="margin-top: 20px;">
+            <a href="https://avertek.net/" target="_blank"><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#59cbe8; font-size: 14px;">Contact AVERtek to learn more about AR marketing.</p></a>
         </div>
     </div>
 
@@ -99,21 +100,19 @@
             const playPauseIcon = document.getElementById('play-pause-icon');
             const arBtn = document.getElementById('ar-launch-button');
             
-            // Create audio object
+            // Single Audio Instance
             const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
             arSound.loop = true;
             let isPlaying = false;
 
-            // FUNCTION TO UNLOCK AUDIO (Crucial for Mobile)
+            // Unlock audio for mobile browsers
             function unlockAudio() {
                 arSound.play().then(() => {
-                    if (!isPlaying) {
-                        arSound.pause(); // Just "warm it up" if we aren't supposed to play yet
-                    }
-                }).catch(e => console.log("Audio unlock failed:", e));
+                    if (!isPlaying) arSound.pause();
+                }).catch(e => console.log("Audio unlock required"));
             }
 
-            function togglePlayPause() {
+            playPauseBtn.addEventListener('click', () => {
                 unlockAudio();
                 if (isPlaying) {
                     video.pause();
@@ -131,13 +130,12 @@
                     playPauseBtn.querySelector('strong').textContent = 'Pause';
                 }
                 isPlaying = !isPlaying;
-            }
-
-            playPauseBtn.addEventListener('click', togglePlayPause);
+            });
 
             arBtn.addEventListener('click', () => {
-                // Ensure audio is active immediately on click
-                arSound.play();
+                // Prime audio immediately on click for Android
+                arSound.play().catch(e => console.log("Audio primed"));
+                
                 video.pause();
                 video.muted = true;
                 isPlaying = false;
@@ -151,19 +149,54 @@
                 }
             });
 
-            // Listen for AR session status to keep audio in sync
+            // Monitor AR state to ensure audio persists in WebXR
             modelViewer.addEventListener('ar-status', (event) => {
                 if (event.detail.status === 'presenting') {
-                    arSound.play();
+                    arSound.play(); // Force play when entering AR
+                    modelViewer.play();
                 } else if (event.detail.status === 'not-presenting') {
-                    // Audio continues or pauses based on your preference
-                    // arSound.pause(); 
+                    // Stop audio when user exits AR
+                    arSound.pause();
+                    arSound.currentTime = 0;
                 }
+            });
+
+            // Certificate Logic
+            document.getElementById('viewPrintCertificateButton').addEventListener('click', async () => {
+                const { PDFDocument, rgb, StandardFonts } = PDFLib;
+                try {
+                    const bytes = await fetch('certificates/sugarlump_app_certificate.pdf').then(res => res.arrayBuffer());
+                    const pdfDoc = await PDFDocument.load(bytes);
+                    const page = pdfDoc.getPages()[0];
+                    const fontB = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+                    page.drawText("Tercek Real Estate Group", { x: 80, y: page.getSize().height - 230, size: 16, font: fontB, color: rgb(8/255, 119/255, 144/255) });
+                    const pdfData = await pdfDoc.save();
+                    window.open(URL.createObjectURL(new Blob([pdfData], { type: 'application/pdf' })), '_blank');
+                } catch (e) { alert("Error generating certificate."); }
             });
         });
 
-        // Placeholder for the PDF and Recording logic (Same as working code)
-        async function openRecordingTab() { /* ... see previous code ... */ }
+        function openRecordingTab() {
+            const recWin = window.open("", "_blank");
+            recWin.document.write(`
+            <html><head><title>Project Recorder</title>
+            <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"><\/script>
+            <style>
+                body { margin: 0; background: #ffff99; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; text-align: center; }
+                model-viewer { width: 100%; height: 60vh; background-color: #ffff99; }
+                .instr { background: white; padding: 20px; border-radius: 12px; border: 3px solid #59cbe8; width: 85%; }
+                .play-btn { background: #59cbe8; color: white; border-radius: 10px; font-size: 22px; font-weight: bold; border: none; cursor: pointer; padding: 15px 40px; margin-top: 15px; }
+            </style></head>
+            <body>
+                <model-viewer id="m" src="Models/entire_family_99cm.glb" autoplay animation-name="Wave" camera-controls></model-viewer>
+                <audio id="music" src="Sound/sweet_neighbor_of_mine3.mp3" loop></audio>
+                <div class="instr">
+                    <p style="color: #ff69b4; font-weight: bold; font-size: 20px;">SCREEN RECORD YOUR MISSION</p>
+                    <button id="ctrl" class="play-btn" onclick="const a=document.getElementById('music'); const m=document.getElementById('m'); if(a.paused){a.play(); m.play(); this.innerText='PAUSE';}else{a.pause(); m.pause(); this.innerText='START SHOW';}">START SHOW</button>
+                </div>
+            </body></html>`);
+            recWin.document.close();
+        }
     </script>
 </body>
 </html>
