@@ -75,7 +75,8 @@
         }
 
         #myModelViewer button[slot="ar-button"] {
-            display: none; /* Keep the default button hidden */
+            opacity: 0;
+            pointer-events: none;
         }
 
         .button-container {
@@ -119,6 +120,7 @@
 
         a { color: #59cbe8; text-decoration: none; font-weight: bold; }
         .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; }
+        .card h2 p { margin: 0; padding: 0; }
     </style>
 </head>
 
@@ -136,7 +138,7 @@
                 </video>
                 <model-viewer
                     id="myModelViewer"
-                    src="Models/entire_family_99cm.glb?sound=Sound/sweet_neighbor_of_mine3.mp3"
+                    src="Models/entire_family_99cm.glb"
                     ios-src="Models/GIRL_converted.usdz"
                     alt="A 3D model"
                     ar
@@ -149,27 +151,22 @@
                     interaction-prompt="none"
                     autoplay
                     animation-name="Wave">
-                    <button slot="ar-button" id="real-ar-button"></button>
+                    <button slot="ar-button"></button>
                 </model-viewer>
             </div>
 
-            <div style="text-align: center; margin-top: 10px;">
+            <div style="text-align: center;">
                 <p style="font-family: Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099;"> Make Sure Sound is On!</p>
             </div>
             
             <div class="button-container">
                 <div class="action-button" id="play-pause-button">
                     <img id="play-pause-icon" src="images/play_icon.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Play/Pause Icon">
-                    <span class="action-button-text">
-                        <strong>Play</strong>
-                    </span>
+                    <span class="action-button-text"><strong>Play</strong></span>
                 </div>
-
-                <div class="action-button" id="custom-ar-trigger">
+                <div class="action-button" id="ar-button">
                     <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom AR Icon">
-                    <span class="action-button-text">
-                        <strong>AR Press Here</strong>
-                    </span>
+                    <span class="action-button-text"><strong>AR Press Here</strong></span>
                 </div>
             </div>
 
@@ -191,26 +188,37 @@
             const modelViewer = document.getElementById('myModelViewer');
             const playPauseButton = document.getElementById('play-pause-button');
             const playPauseIcon = document.getElementById('play-pause-icon');
-            const customArTrigger = document.getElementById('custom-ar-trigger');
+            const arButton = document.getElementById('ar-button');
             
-            // Initialize the separate audio object
+            // Setup the AR Audio
             const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
-            arSound.loop = true; 
+            arSound.loop = true;
 
             let isPlaying = false;
 
-            // Handle Video + Audio Playback
+            // Unlock audio for mobile browsers on first interaction
+            const initAudio = () => {
+                arSound.play().then(() => {
+                    arSound.pause();
+                    arSound.currentTime = 0;
+                }).catch(e => console.log("Waiting for user interaction..."));
+                window.removeEventListener('touchstart', initAudio);
+                window.removeEventListener('click', initAudio);
+            };
+            window.addEventListener('touchstart', initAudio);
+            window.addEventListener('click', initAudio);
+
             function togglePlayPause() {
                 if (isPlaying) {
                     video.pause();
-                    arSound.pause(); 
+                    arSound.pause();
                     video.muted = true;
                     playPauseIcon.src = 'images/play_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Play';
                 } else {
-                    video.play().catch(err => console.log("Video wait", err));
-                    arSound.play().catch(err => console.log("Audio wait", err));
                     video.muted = false;
+                    video.play();
+                    arSound.play();
                     playPauseIcon.src = 'images/pause_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Pause';
                 }
@@ -221,31 +229,31 @@
                 playPauseButton.addEventListener('click', togglePlayPause);
             }
 
-            // Launch AR and trigger sound
-            if (customArTrigger) {
-                customArTrigger.addEventListener('click', () => {
-                    // Reset UI
+            if (arButton) {
+                arButton.addEventListener('click', () => {
                     video.pause();
                     video.muted = true;
                     isPlaying = false;
                     playPauseIcon.src = 'images/play_icon.png';
                     if(playPauseButton) playPauseButton.querySelector('strong').textContent = 'Play';
 
-                    // Play sound (Interaction ensures this is allowed)
-                    arSound.play().catch(err => console.log("Interaction required for audio", err));
+                    // Force sound to play for AR
+                    arSound.play().catch(err => console.error("Audio failed", err));
 
                     if (modelViewer.canActivateAR) {
                         modelViewer.activateAR();
                     } else {
-                        alert("AR is not supported on this device/browser.");
+                        alert("AR is supported only on mobile devices.");
                     }
                 });
             }
 
-            // stop sound if they leave AR mode back to the browser
+            // Sync audio with the AR session state
             modelViewer.addEventListener('ar-status', (event) => {
                 if (event.detail.status === 'not-presenting') {
                     arSound.pause();
+                } else if (event.detail.status === 'presenting') {
+                    arSound.play();
                 }
             });
         });
