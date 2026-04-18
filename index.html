@@ -74,7 +74,6 @@
             z-index: 1;
         }
 
-        /* The real AR button is hidden but clickable via JS */
         #myModelViewer button[slot="ar-button"] {
             display: none;
         }
@@ -138,9 +137,9 @@
                 </video>
                 <model-viewer
                     id="myModelViewer"
-                    src="Models/entire_family_99cm.glb?sound=Sound/sweet_neighbor_of_mine3.mp3"
+                    src="Models/entire_family_99cm.glb" 
                     ios-src="Models/GIRL_converted.usdz"
-                    alt="A 3D model"
+                    alt="Sugarlump Family"
                     ar
                     ar-modes="scene-viewer quick-look"
                     camera-controls
@@ -193,9 +192,11 @@
             const playPauseButton = document.getElementById('play-pause-button');
             const playPauseIcon = document.getElementById('play-pause-icon');
             const customArTrigger = document.getElementById('custom-ar-trigger');
+            
+            // Separate audio object for AR
+            const arAudio = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
             let isPlaying = false;
 
-            // Toggle Video Play/Pause
             function togglePlayPause() {
                 if (isPlaying) {
                     video.pause();
@@ -215,24 +216,33 @@
                 playPauseButton.addEventListener('click', togglePlayPause);
             }
 
-            // Launch AR
+            // Launch AR Logic
             if (customArTrigger) {
                 customArTrigger.addEventListener('click', () => {
-                    // Stop video before entering AR
+                    // Pause the main page video
                     video.pause();
                     video.muted = true;
                     isPlaying = false;
                     playPauseIcon.src = 'images/play_icon.png';
                     if(playPauseButton) playPauseButton.querySelector('strong').textContent = 'Play';
 
-                    // Verify if AR is supported and activate
                     if (modelViewer.canActivateAR) {
                         modelViewer.activateAR();
                     } else {
-                        alert("AR is not supported on this device/browser. Please try on a mobile phone.");
+                        alert("AR is not supported on this device/browser.");
                     }
                 });
             }
+
+            // Audio logic for AR Session
+            modelViewer.addEventListener('ar-status', (event) => {
+                if (event.detail.status === 'session-started') {
+                    arAudio.play().catch(e => console.log("Audio play failed", e));
+                } else if (event.detail.status === 'not-presenting') {
+                    arAudio.pause();
+                    arAudio.currentTime = 0;
+                }
+            });
         });
     </script>
 </body>
