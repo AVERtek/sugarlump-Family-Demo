@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>sugarlump-Amazon-Template</title>
 
+  <!-- model-viewer -->
   <script type="module" src="[ajax.googleapis.com](https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js)"></script>
 
   <style>
@@ -42,51 +43,37 @@
       width: 100%;
       height: 100%;
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       object-fit: cover;
       z-index: 2;
     }
 
     #myModelViewer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 1;
     }
 
     #myModelViewer button[slot="ar-button"] { opacity: 0; pointer-events: none; }
 
     .button-container {
-      margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      margin-top: 30px; display: flex; justify-content: center;
+      flex-wrap: wrap; gap: 10px;
     }
 
     .action-button {
-      background-color: #ffffff;
-      border-radius: 8px;
-      border: 2px solid #59cbe8;
-      height: 60px;
-      min-width: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      background-color: #ffffff; border-radius: 8px;
+      border: 2px solid #59cbe8; height: 60px; min-width: 250px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 10px; cursor: pointer;
+      transition: background-color .3s, border-color .3s;
     }
     .action-button:hover { background-color: #f0f8ff; border-color: #48b0cc; }
 
     .action-button-text {
-      font-size: 32px;
-      color: #000099;
+      font-size: 32px; color: #000099; white-space: nowrap;
       font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
-      white-space: nowrap;
     }
 
     @font-face {
@@ -95,31 +82,31 @@
     }
 
     a { color: #59cbe8; text-decoration: none; font-weight: bold; }
-    .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; }
-    .card h2 p { margin: 0; padding: 0; }
+    .card h2 { margin: .5em 0; line-height: 1.2; }
+    .card h2 p { margin: 0; }
   </style>
 </head>
 
 <body>
   <div class="container">
     <div class="card">
-      <img src="images/erin_video_scenes-32.png" alt="Logo" style="width: 350px; height: auto; display: block; margin: auto;">
+      <img src="images/erin_video_scenes-32.png" alt="Logo" style="width:350px;height:auto;display:block;margin:auto;">
     </div>
 
     <div class="card">
       <div class="viewer-container">
         <video id="myVideo" loop muted playsinline poster="images/Family Demo Poster.png">
           <source src="Video/sugarlump_family_video.mp4" type="video/mp4">
-          Your browser does not support the video tag.
         </video>
 
+        <!-- ✅ Restored Scene Viewer for Android reliability -->
         <model-viewer
           id="myModelViewer"
           src="Models/entire_family_99cm.glb"
           ios-src="Models/GIRL_converted.usdz"
           alt="A 3D model"
           ar
-          ar-modes="webxr quick-look"
+          ar-modes="scene-viewer webxr quick-look"
           camera-controls
           poster="images/Poster_SN_Scene.png"
           shadow-intensity="1"
@@ -133,9 +120,7 @@
       </div>
 
       <div style="text-align:center;">
-        <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight:bold; color:#000099;">
-          Make Sure Sound is On!
-        </p>
+        <p style="font-family:Chalet LondonNineteenEighty Regular;font-weight:bold;color:#000099;">Make Sure Sound is On!</p>
       </div>
 
       <div class="button-container">
@@ -162,114 +147,100 @@
       <div class="card" style="margin-top:20px;">
         <img src="images/erin_video_scenes-34.png" style="width:300px;max-width:90%;margin-bottom:10px;">
         <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
-          <b>about:</b><a href="[sugarlump.love](https://sugarlump.love/about)" target="_blank"> creativity + kindness</a></p></h2>
+          <b>about:</b> <a href="[sugarlump.love](https://sugarlump.love/about)" target="_blank">creativity + kindness</a></p></h2>
         <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
-          <b>rewards:</b><a href="[sugarlump.love](https://sugarlump.love/)" target="_blank"> the kindness project</a></p></h2>
+          <b>rewards:</b> <a href="[sugarlump.love](https://sugarlump.love/)" target="_blank">the kindness project</a></p></h2>
         <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
-          <b>join:</b><a href="[sugarlump.love](https://sugarlump.love/contact)" target="_blank"> sugarlump kindness club</a></p></h2>
+          <b>join:</b> <a href="[sugarlump.love](https://sugarlump.love/contact)" target="_blank">sugarlump kindness club</a></p></h2>
         <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
-          <b>shop:</b><a href="[sugarlump.love](https://sugarlump.love/shop)" target="_blank"> creative kindness kits</a></p></h2>
+          <b>shop:</b> <a href="[sugarlump.love](https://sugarlump.love/shop)" target="_blank">creative kindness kits</a></p></h2>
         <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
-          <b>brag tags:</b><a href="[schoollife.com](https://www.schoollife.com/bragtags-intro)" target="_blank"> accomplishment, recognition, confidence</a></p></h2>
+          <b>brag tags:</b> <a href="[schoollife.com](https://www.schoollife.com/bragtags-intro)" target="_blank">accomplishment, recognition, confidence</a></p></h2>
         <h2><p style="font-family:'Chalet LondonNineteenEighty Regular';color:#ff69b4;font-size:20px;">
-          <b>sponsors:</b><a href="[sugarlump.love](https://sugarlump.love/be-a-sponsor)" target="_blank"> get involved</a></p></h2>
+          <b>sponsors:</b> <a href="[sugarlump.love](https://sugarlump.love/be-a-sponsor)" target="_blank">get involved</a></p></h2>
       </div>
     </div>
   </div>
 
- <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const video = document.getElementById('myVideo');
-  const modelViewer = document.getElementById('myModelViewer');
-  const playPauseButton = document.getElementById('play-pause-button');
-  const playPauseIcon = document.getElementById('play-pause-icon');
-  const arButton = document.getElementById('ar-button');
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('myVideo');
+    const modelViewer = document.getElementById('myModelViewer');
+    const playPauseButton = document.getElementById('play-pause-button');
+    const playPauseIcon = document.getElementById('play-pause-icon');
+    const arButton = document.getElementById('ar-button');
 
-  const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
-  arSound.loop = true;
-  let isPlaying = false;
+    // Background music for non-AR view / WebXR only
+    const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
+    arSound.loop = true;
+    let isPlaying = false;
 
-  // Unlock audio on first interaction
-  const initAudio = () => {
-    arSound.play().then(() => {
-      arSound.pause();
-      arSound.currentTime = 0;
-    }).catch(() => {});
-    window.removeEventListener('touchstart', initAudio);
-    window.removeEventListener('click', initAudio);
-  };
-  window.addEventListener('touchstart', initAudio);
-  window.addEventListener('click', initAudio);
+    // Unlock audio on first interaction (mobile autoplay policies)
+    const initAudio = () => {
+      arSound.play().then(() => {
+        arSound.pause(); arSound.currentTime = 0;
+      }).catch(()=>{});
+      window.removeEventListener('touchstart', initAudio);
+      window.removeEventListener('click', initAudio);
+    };
+    window.addEventListener('touchstart', initAudio);
+    window.addEventListener('click', initAudio);
 
-  function togglePlayPause() {
-    if (isPlaying) {
-      video.pause();
-      arSound.pause();
-      video.muted = true;
-      playPauseIcon.src = 'images/play_icon.png';
-      playPauseButton.querySelector('strong').textContent = 'Play';
-    } else {
-      video.muted = false;
-      video.play();
-      arSound.play();
-      playPauseIcon.src = 'images/pause_icon.png';
-      playPauseButton.querySelector('strong').textContent = 'Pause';
+    function togglePlayPause() {
+      if (isPlaying) {
+        video.pause(); arSound.pause(); video.muted = true;
+        playPauseIcon.src = 'images/play_icon.png';
+        playPauseButton.querySelector('strong').textContent = 'Play';
+      } else {
+        video.muted = false; video.play(); arSound.play();
+        playPauseIcon.src = 'images/pause_icon.png';
+        playPauseButton.querySelector('strong').textContent = 'Pause';
+      }
+      isPlaying = !isPlaying;
     }
-    isPlaying = !isPlaying;
-  }
+    playPauseButton.addEventListener('click', togglePlayPause);
 
-  if (playPauseButton) playPauseButton.addEventListener('click', togglePlayPause);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  if (arButton) {
     arButton.addEventListener('click', async () => {
       // Pause preview media
-      video.pause();
-      video.muted = true;
-      arSound.pause();
+      video.pause(); video.muted = true; arSound.pause();
       isPlaying = false;
       playPauseIcon.src = 'images/play_icon.png';
       playPauseButton.querySelector('strong').textContent = 'Play';
 
-      // ✅ Only show alert on desktop
+      // Desktop fallback
       if (!isMobile) {
-        alert("AR works only on mobile devices.");
+        alert('AR works only on mobile devices.');
         return;
       }
 
-      // ✅ Wait until <model-viewer> signals AR is ready
+      // Wait for model-viewer readiness
       await modelViewer.updateComplete;
 
-      // ✅ Start audio before AR for WebXR mode
+      // Play WebXR audio before AR starts (has no effect for Scene Viewer)
       try { await arSound.play(); } catch (e) { console.warn('Audio play blocked:', e); }
 
-      // ✅ Safely attempt to launch AR
-      if (modelViewer.canActivateAR) {
-        try {
-          modelViewer.activateAR();
-        } catch (err) {
-          console.error('AR activation failed:', err);
-        }
-      } else {
-        alert('AR not supported in this browser. Try Chrome or Safari mobile.');
+      // Launch AR
+      try {
+        if (modelViewer.canActivateAR) modelViewer.activateAR();
+        else alert('AR not supported in this browser. Try Chrome or Safari mobile.');
+      } catch (err) {
+        console.error('AR activation failed:', err);
       }
     });
-  }
 
-  modelViewer.addEventListener('ar-status', (event) => {
-    const status = event.detail.status;
-    if (status === 'presenting') {
-      // Pause web audio on iOS Quick Look so baked audio can play
-      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) arSound.pause();
-    } else if (status === 'not-presenting') {
-      if (isPlaying) {
-        arSound.play();
-        video.play();
+    // Maintain audio state across AR sessions
+    modelViewer.addEventListener('ar-status', (event) => {
+      const status = event.detail.status;
+      if (status === 'presenting') {
+        // In Scene Viewer/Quick Look stop web audio
+        arSound.pause();
+      } else if (status === 'not-presenting') {
+        if (isPlaying) { arSound.play(); video.play(); }
       }
-    }
+    });
   });
-});
-</script>
+  </script>
 </body>
 </html>
