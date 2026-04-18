@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>sugarlump-Amazon-Template</title>
-
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <title>sugarlump sweet neighbor</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=0-0000000000"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,162 +12,134 @@
         gtag('js', new Date());
         gtag('config', '0-0000000000');
     </script>
-
     <style>
-        html, body {
-            margin: 0; padding: 0; overflow-x: hidden;
-            font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
-            color: #244376; background-color: #ffff99;
-            display: flex; flex-direction: column; align-items: center;
-        }
-
+        html, body { margin: 0; padding: 0; overflow-x: hidden; font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif; color: #244376; background-color: #ffff99; display: flex; flex-direction: column; align-items: center; }
         .container { max-width: 600px; width: 100%; box-sizing: border-box; padding: 0 10px; }
-
-        .card {
-            background-color: #ffff99; border: 2px solid #ffff99; padding: 10px;
-            margin: 0 0 1em 0; display: flex; flex-direction: column;
-            align-items: center; text-align: center; border-radius: 6px; position: relative;
-        }
-
+        .card { background-color: #ffff99; border: 2px solid #ffff99; padding: 10px; margin-bottom: 1em; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 6px; position: relative; width: 100%; box-sizing: border-box; }
+        
         .viewer-container { width: 100%; height: 400px; position: relative; }
+        #myVideo { width: 100%; height: 100%; position: absolute; top: 0; left: 0; object-fit: cover; z-index: 2; }
+        model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
+        model-viewer button[slot="ar-button"] { display: none; }
 
-        #myVideo {
-            width: 100%; height: 100%; position: absolute;
-            top: 0; left: 0; object-fit: cover; z-index: 2;
-        }
+        .main-button { background-color: #ffffff; border-radius: 8px; border: 2px solid #59cbe8; height: 60px; width: 300px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-top: 10px; padding: 0 10px; }
+        .main-button img { height: 40px; margin-right: 10px; }
+        .button-text { font-size: 24px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular'; }
 
-        #myModelViewer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
-        }
-
-        /* Hiding the default AR button to use your custom Heart button */
-        #myModelViewer button[slot="ar-button"] { display: none; }
-
-        .button-container {
-            margin-top: 30px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
-        }
-
-        .action-button {
-            background-color: #ffffff; border-radius: 8px; border: 2px solid #59cbe8;
-            height: 60px; min-width: 250px; display: flex; align-items: center;
-            justify-content: center; padding: 10px; cursor: pointer;
-        }
-
-        .action-button-text {
-            font-size: 32px; color: #000099;
-            font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
-        }
-
-        @font-face {
-            font-family: 'Chalet LondonNineteenEighty Regular';
-            src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
-        }
-
+        /* 0.5em spacing for links */
+        .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px; }
+        
+        @font-face { font-family: 'Chalet LondonNineteenEighty Regular'; src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype'); }
         a { color: #59cbe8; text-decoration: none; font-weight: bold; }
-        .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="card">
-            <img src="images/erin_video_scenes-32.png" alt="Logo" style="width: 350px; height: auto;">
+<div class="container">
+    <div class="card">
+        <img src="images/erin_video_scenes-32.png" style="width: 350px; max-width: 100%; height: auto;">
+    </div>
+
+    <div class="card">
+        <div class="viewer-container">
+            <video id="myVideo" loop muted playsinline poster="images/Family Demo Poster.png">
+                <source src="Video/sugarlump_family_video.mp4" type="video/mp4">
+            </video>
+            <model-viewer id="myModelViewer" src="Models/entire_family_99cm.glb" ios-src="Models/GIRL_converted.usdz" ar ar-modes="scene-viewer webxr quick-look" camera-controls autoplay animation-name="Wave">
+                <button slot="ar-button"></button>
+            </model-viewer>
         </div>
 
-        <div class="card">
-            <div class="viewer-container">
-                <video id="myVideo" loop muted playsinline poster="images/Family Demo Poster.png">
-                    <source src="Video/sugarlump_family_video.mp4" type="video/mp4">
-                </video>
-                
-                <model-viewer
-                    id="myModelViewer"
-                    src="Models/entire_family_99cm.glb?sound=Sound/sweet_neighbor_of_mine3.mp3"
-                    ios-src="Models/GIRL_converted.usdz"
-                    ar
-                    ar-modes="scene-viewer webxr quick-look"
-                    camera-controls
-                    poster="images/Poster_SN_Scene.png"
-                    autoplay
-                    animation-name="Wave">
-                    <button slot="ar-button"></button>
-                </model-viewer>
-            </div>
+        <p style="font-family: 'Chalet LondonNineteenEighty Regular'; font-weight: bold; color: #000099; margin-top: 10px;">Make Sure Sound is On!</p>
 
-            <p style="font-family: Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099; margin-top: 10px;">Make Sure Sound is On!</p>
-            
-            <div class="button-container">
-                <div class="action-button" id="play-pause-button">
-                    <img id="play-pause-icon" src="images/play_icon.png" style="height: 4em; width: auto; margin-right: 5px;">
-                    <span class="action-button-text"><strong>Play</strong></span>
-                </div>
-                <div class="action-button" id="ar-trigger">
-                    <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;">
-                    <span class="action-button-text"><strong>AR Press Here</strong></span>
-                </div>
-            </div>
+        <button id="play-pause-button" class="main-button">
+            <img id="play-pause-icon" src="images/play_icon.png">
+            <span class="button-text"><strong>Play</strong></span>
+        </button>
 
-            <div class="card" style="margin-top: 20px;">
-                <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%;">
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>about:</b><a href="https://sugarlump.love/about" target="_blank"> creativity + kindness</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>rewards:</b><a href="https://sugarlump.love/" target="_blank"> the kindness project</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>join:</b><a href="https://sugarlump.love/contact" target="_blank"> sugarlump kindness club</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>shop:</b><a href="https://sugarlump.love/shop" target="_blank"> creative kindness kits</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>brag tags:</b><a href="https://www.schoollife.com/bragtags-intro" target="_blank"> accomplishment, recognition, confidence</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>sponsors:</b><a href="https://sugarlump.love/be-a-sponsor" target="_blank"> get involved</a></p></h2>
-            </div>
+        <button id="ar-trigger" class="main-button">
+            <img src="images/Heart button.png">
+            <span class="button-text"><strong>AR Press Here</strong></span>
+        </button>
+
+        <div class="card" style="border: 2px solid #59cbe8; background: white; margin-top: 20px; padding: 15px;">
+            <p style="font-weight: bold; color: #ff69b4; margin: 5px 0; white-space: nowrap; display: flex; align-items: center; justify-content: center;">
+                SCREEN RECORD iOS: Swipe down top-right & tap <img src="images/iPhone Record Button 9.png" style="height: 24px; margin-left: 8px;">
+            </p>
+            <p style="font-weight: bold; color: #ff69b4; margin: 5px 0;">ANDROID: Swipe down twice & tap "Screen Record"</p>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('myVideo');
-            const modelViewer = document.getElementById('myModelViewer');
-            const playPauseButton = document.getElementById('play-pause-button');
-            const playPauseIcon = document.getElementById('play-pause-icon');
-            const arTrigger = document.getElementById('ar-trigger');
-            
-            // Dedicated audio object for browser playback
-            const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
-            arSound.loop = true;
+    <div class="card" style="margin-top: 20px;">
+        <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%; margin-bottom: 10px;">
+        <h2><b>about:</b> <a href="https://sugarlump.love/about" target="_blank">creativity + kindness</a></h2>
+        <h2><b>rewards:</b> <a href="https://sugarlump.love/" target="_blank">the kindness project</a></h2>
+        <h2><b>join:</b> <a href="https://sugarlump.love/contact" target="_blank">sugarlump kindness club</a></h2>
+        <h2><b>shop:</b> <a href="https://sugarlump.love/shop" target="_blank">creative kindness kits</a></h2>
+        <h2><b>brag tags:</b> <a href="https://www.schoollife.com/bragtags-intro" target="_blank">accomplishment, recognition, confidence</a></h2>
+        <h2><b>sponsors:</b> <a href="https://sugarlump.love/be-a-sponsor" target="_blank">get involved</a></h2>
+    </div>
+</div>
 
-            let isPlaying = false;
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('myVideo');
+        const mv = document.getElementById('myModelViewer');
+        const playBtn = document.getElementById('play-pause-button');
+        const playIcon = document.getElementById('play-pause-icon');
+        const arBtn = document.getElementById('ar-trigger');
+        
+        // Setup Audio like the Working Code's recorder tab logic
+        const music = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
+        music.loop = true;
 
-            // Handle the 2D Play/Pause Button
-            playPauseButton.addEventListener('click', () => {
-                if (isPlaying) {
-                    video.pause();
-                    arSound.pause();
-                    video.muted = true;
-                    playPauseIcon.src = 'images/play_icon.png';
-                    playPauseButton.querySelector('strong').textContent = 'Play';
-                } else {
-                    video.muted = false;
-                    video.play();
-                    arSound.play();
-                    playPauseIcon.src = 'images/pause_icon.png';
-                    playPauseButton.querySelector('strong').textContent = 'Pause';
-                }
-                isPlaying = !isPlaying;
-            });
+        let isPlaying = false;
 
-            // Handle the AR Launch
-            arTrigger.addEventListener('click', () => {
-                // Stop the 2D video stuff
+        function togglePlay() {
+            if (isPlaying) {
                 video.pause();
+                music.pause();
                 video.muted = true;
-                isPlaying = false;
-                playPauseIcon.src = 'images/play_icon.png';
-                playPauseButton.querySelector('strong').textContent = 'Play';
+                playIcon.src = 'images/play_icon.png';
+                playBtn.querySelector('strong').innerText = 'Play';
+            } else {
+                video.muted = false;
+                video.play();
+                music.play();
+                playIcon.src = 'images/pause_icon.png';
+                playBtn.querySelector('strong').innerText = 'Pause';
+            }
+            isPlaying = !isPlaying;
+        }
 
-                // Activate AR - The ?sound query in the src handles the Scene Viewer audio
-                if (modelViewer.canActivateAR) {
-                    modelViewer.activateAR();
-                } else {
-                    alert("AR is supported only on mobile devices.");
-                }
-            });
+        playBtn.addEventListener('click', togglePlay);
+
+        arBtn.addEventListener('click', () => {
+            // Stop 2D video/audio
+            video.pause();
+            video.muted = true;
+            isPlaying = false;
+            playIcon.src = 'images/play_icon.png';
+            playBtn.querySelector('strong').innerText = 'Play';
+
+            // IMPORTANT: Start the music right before AR activation
+            music.play().catch(e => console.log("Audio play deferred"));
+
+            if (mv.canActivateAR) {
+                mv.activateAR();
+            } else {
+                alert("AR features require a mobile device.");
+            }
         });
-    </script>
+
+        // Ensure music keeps playing OR restarts when entering/exiting AR
+        mv.addEventListener('ar-status', (event) => {
+            if (event.detail.status === 'presenting') {
+                music.play();
+            } else if (event.detail.status === 'not-presenting') {
+                music.pause();
+            }
+        });
+    });
+</script>
 </body>
 </html>
