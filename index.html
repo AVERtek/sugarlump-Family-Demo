@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+<html lang="en-US">
 
 <head>
     <meta charset="UTF-8">
@@ -11,19 +11,13 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=0-0000000000"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', '0-0000000000');
     </script>
 
     <style>
-        /* Your CSS styles here */
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -55,41 +49,35 @@
             position: relative;
         }
 
-        /* The wrapper for the video and model-viewer to control their size */
         .viewer-container {
             width: 100%;
             height: 400px;
             position: relative;
         }
 
-        /* Style for the video element to fit the container */
         #myVideo {
             width: 100%;
             height: 100%;
-            position: absolute; /* Position it absolutely within the container */
+            position: absolute;
             top: 0;
             left: 0;
             object-fit: cover;
-            z-index: 2; /* Put the video on top of the model-viewer */
+            z-index: 2;
         }
 
-        /* Style for the model-viewer to be positioned behind the video, allowing AR to work */
         #myModelViewer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Place the model-viewer behind the video */
+            z-index: 1;
         }
 
-        /* The slot AR button is hidden from view and interactions */
+        /* The real AR button is hidden but clickable via JS */
         #myModelViewer button[slot="ar-button"] {
-            opacity: 0;
-            pointer-events: none;
+            display: none;
         }
-
-        /* --- BUTTON STYLING --- */
 
         .button-container {
             margin-top: 30px;
@@ -130,24 +118,13 @@
             src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
         }
 
-        @font-face {
-            font-family: 'DaisyByhapppyal-Regular';
-            src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype');
-        }
-
-         a { color: #59cbe8; text-decoration: none; font-weight: bold; }
-        .hunt-header { font-family: 'Chalet LondonNineteenEighty Regular'; color: #ff69b4; text-align: center; width: 100%; margin: 20px 0; }
-        model-viewer#reveal { display: none; }
-        
-          /* 1/2 line space (0.5em) between links */
+        a { color: #59cbe8; text-decoration: none; font-weight: bold; }
         .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; }
         .card h2 p { margin: 0; padding: 0; }
     </style>
 </head>
 
 <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-0000000" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
     <div class="container">
         <div class="card">
             <img src="images/erin_video_scenes-32.png" alt="Logo" style="width: 350px; height: auto; display: block; margin: auto;">
@@ -173,12 +150,12 @@
                     ar-placement="floor"
                     interaction-prompt="none"
                     animation-name="Wave">
-                    <button slot="ar-button" aria-label="AR"></button>
+                    <button slot="ar-button" id="real-ar-button"></button>
                 </model-viewer>
             </div>
 
-            <div style="text-align: center;">
-            <p style="font-family: Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099;"> Make Sure Sound is On!</p>
+            <div style="text-align: center; margin-top: 10px;">
+                <p style="font-family: Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099;"> Make Sure Sound is On!</p>
             </div>
             
             <div class="button-container">
@@ -188,84 +165,75 @@
                         <strong>Play</strong>
                     </span>
                 </div>
-                <div class="action-button" id="ar-button">
+
+                <div class="action-button" id="custom-ar-trigger">
                     <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom AR Icon">
                     <span class="action-button-text">
                         <strong>AR Press Here</strong>
                     </span>
                 </div>
-                 <div class="card" style="margin-top: 20px;">
-        <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%; margin-bottom: 10px;">
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>about:</b><a href="https://sugarlump.love/about" target="_blank"> creativity + kindness</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>rewards:</b><a href="https://sugarlump.love/" target="_blank"> the kindness project</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>join:</b><a href="https://sugarlump.love/contact" target="_blank"> sugarlump kindness club</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>shop:</b><a href="https://sugarlump.love/shop" target="_blank"> creative kindness kits</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>brag tags:</b><a href="https://www.schoollife.com/bragtags-intro" target="_blank"> accomplishment, recognition, confidence</a></p></h2>
-        <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>sponsors:</b><a href="https://sugarlump.love/be-a-sponsor" target="_blank"> get involved</a></p></h2>
-      </div>
-       </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%; margin-bottom: 10px;">
+                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>about:</b><a href="https://sugarlump.love/about" target="_blank"> creativity + kindness</a></p></h2>
+                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>rewards:</b><a href="https://sugarlump.love/" target="_blank"> the kindness project</a></p></h2>
+                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>join:</b><a href="https://sugarlump.love/contact" target="_blank"> sugarlump kindness club</a></p></h2>
+                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>shop:</b><a href="https://sugarlump.love/shop" target="_blank"> creative kindness kits</a></p></h2>
+                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>brag tags:</b><a href="https://www.schoollife.com/bragtags-intro" target="_blank"> accomplishment, recognition, confidence</a></p></h2>
+                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>sponsors:</b><a href="https://sugarlump.love/be-a-sponsor" target="_blank"> get involved</a></p></h2>
+            </div>
         </div>
     </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
+        document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('myVideo');
             const modelViewer = document.getElementById('myModelViewer');
             const playPauseButton = document.getElementById('play-pause-button');
             const playPauseIcon = document.getElementById('play-pause-icon');
-            const arButton = document.getElementById('ar-button');
-            const orderBookButton = document.getElementById('order-book-button');
+            const customArTrigger = document.getElementById('custom-ar-trigger');
             let isPlaying = false;
 
-            // Function to toggle play/pause for the video and sound
+            // Toggle Video Play/Pause
             function togglePlayPause() {
                 if (isPlaying) {
                     video.pause();
-                    video.muted = true; // Mute the video
+                    video.muted = true;
                     playPauseIcon.src = 'images/play_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Play';
                 } else {
-                    video.play().catch(error => {
-                        console.log("Video autoplay was prevented.", error);
-                    });
-                    video.muted = false; // Unmute the video
+                    video.play().catch(err => console.error("Autoplay blocked", err));
+                    video.muted = false;
                     playPauseIcon.src = 'images/pause_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Pause';
                 }
                 isPlaying = !isPlaying;
             }
 
-            // Click event for the play/pause button
             if (playPauseButton) {
                 playPauseButton.addEventListener('click', togglePlayPause);
             }
 
-            // Handles the custom AR button's click behavior
-            if (arButton) {
-                arButton.addEventListener('click', () => {
-                    if (modelViewer.canActivateAR) {
-                        // Pause the video and sound when AR is launched
-                        video.pause();
-                        video.muted = true;
-                        isPlaying = false;
-                        playPauseIcon.src = 'images/play_icon.png';
-                        playPauseButton.querySelector('strong').textContent = 'Play';
+            // Launch AR
+            if (customArTrigger) {
+                customArTrigger.addEventListener('click', () => {
+                    // Stop video before entering AR
+                    video.pause();
+                    video.muted = true;
+                    isPlaying = false;
+                    playPauseIcon.src = 'images/play_icon.png';
+                    if(playPauseButton) playPauseButton.querySelector('strong').textContent = 'Play';
 
-                        // Activate AR on the hidden model-viewer element
+                    // Verify if AR is supported and activate
+                    if (modelViewer.canActivateAR) {
                         modelViewer.activateAR();
                     } else {
-                        alert("AR is supported only on a mobile device, not on this device or browser.");
+                        alert("AR is not supported on this device/browser. Please try on a mobile phone.");
                     }
-                });
-            }
-
-            // Click event listener for the "Order Book Here" button
-            if (orderBookButton) {
-                orderBookButton.addEventListener('click', () => {
-                    window.open('https://www.amazon.com/Sweet-Dreams-Sugarlump-childrens-everywhere/dp/B0FFZD7D12/ref=sr_1_1?crid=2PE5ZR31RUKFJ&dib=eyJ2IjoiMSJ9.eirXTPVo6volOV0M2LSzWYM7M7OETpDHtuB5kCsvMqZpHjvNE3fvrGYiQzi9OEE_KnGVoDwiK8TJUKsihTlWlEkYrzfe4QfSs8rE6vaoo0Y5BfWqKzpuFPGm7bKE9IC-Kz-0FvP462KBgxOa04D1aqLppMInjk90QDppTNon6eTrQ0InDpeNmty3hB14QayZjes0oEcHGgvSH_4m4oM9SHyIbK9wzspljEyRdN_vAiF9SAFTutLx3FZqHyN27dyNdIqY&dib_tag=se&keywords=sugarlump&qid=1752536576&sprefix=sugarlump%2Caps%2C158&sr=8-1%27', '_blank');
                 });
             }
         });
     </script>
 </body>
-
 </html>
