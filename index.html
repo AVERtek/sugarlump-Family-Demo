@@ -177,91 +177,99 @@
     </div>
   </div>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const video = document.getElementById('myVideo');
-    const modelViewer = document.getElementById('myModelViewer');
-    const playPauseButton = document.getElementById('play-pause-button');
-    const playPauseIcon = document.getElementById('play-pause-icon');
-    const arButton = document.getElementById('ar-button');
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const video = document.getElementById('myVideo');
+  const modelViewer = document.getElementById('myModelViewer');
+  const playPauseButton = document.getElementById('play-pause-button');
+  const playPauseIcon = document.getElementById('play-pause-icon');
+  const arButton = document.getElementById('ar-button');
 
-    const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
-    arSound.loop = true;
-    let isPlaying = false;
+  const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
+  arSound.loop = true;
+  let isPlaying = false;
 
-    const initAudio = () => {
-      arSound.play().then(() => {
-        arSound.pause();
-        arSound.currentTime = 0;
-      }).catch(()=>{});
-      window.removeEventListener('touchstart', initAudio);
-      window.removeEventListener('click', initAudio);
-    };
-    window.addEventListener('touchstart', initAudio);
-    window.addEventListener('click', initAudio);
+  // Unlock audio on first interaction
+  const initAudio = () => {
+    arSound.play().then(() => {
+      arSound.pause();
+      arSound.currentTime = 0;
+    }).catch(() => {});
+    window.removeEventListener('touchstart', initAudio);
+    window.removeEventListener('click', initAudio);
+  };
+  window.addEventListener('touchstart', initAudio);
+  window.addEventListener('click', initAudio);
 
-    function togglePlayPause() {
-      if (isPlaying) {
-        video.pause();
-        arSound.pause();
-        video.muted = true;
-        playPauseIcon.src = 'images/play_icon.png';
-        playPauseButton.querySelector('strong').textContent = 'Play';
-      } else {
-        video.muted = false;
-        video.play();
-        arSound.play();
-        playPauseIcon.src = 'images/pause_icon.png';
-        playPauseButton.querySelector('strong').textContent = 'Pause';
-      }
-      isPlaying = !isPlaying;
+  function togglePlayPause() {
+    if (isPlaying) {
+      video.pause();
+      arSound.pause();
+      video.muted = true;
+      playPauseIcon.src = 'images/play_icon.png';
+      playPauseButton.querySelector('strong').textContent = 'Play';
+    } else {
+      video.muted = false;
+      video.play();
+      arSound.play();
+      playPauseIcon.src = 'images/pause_icon.png';
+      playPauseButton.querySelector('strong').textContent = 'Pause';
     }
+    isPlaying = !isPlaying;
+  }
 
-    if (playPauseButton) playPauseButton.addEventListener('click', togglePlayPause);
+  if (playPauseButton) playPauseButton.addEventListener('click', togglePlayPause);
 
-    // Detect mobile device
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    if (arButton) {
-      arButton.addEventListener('click', async () => {
-        // Pause any ongoing animations/sound
-        video.pause();
-        video.muted = true;
-        arSound.pause();
-        isPlaying = false;
-        playPauseIcon.src = 'images/play_icon.png';
-        playPauseButton.querySelector('strong').textContent = 'Play';
+  if (arButton) {
+    arButton.addEventListener('click', async () => {
+      // Pause preview media
+      video.pause();
+      video.muted = true;
+      arSound.pause();
+      isPlaying = false;
+      playPauseIcon.src = 'images/play_icon.png';
+      playPauseButton.querySelector('strong').textContent = 'Play';
 
-        // Only proceed if mobile
-        if (!isMobile) {
-          alert("AR works only on mobile devices.");
-          return;
-        }
+      // ✅ Only show alert on desktop
+      if (!isMobile) {
+        alert("AR works only on mobile devices.");
+        return;
+      }
 
-        // Play web audio so it persists into WebXR
-        try { await arSound.play(); } catch (e) { console.warn('Audio play blocked:', e); }
+      // ✅ Wait until <model-viewer> signals AR is ready
+      await modelViewer.updateComplete;
 
-        // Activate AR (WebXR for Android, Quick Look for iOS)
+      // ✅ Start audio before AR for WebXR mode
+      try { await arSound.play(); } catch (e) { console.warn('Audio play blocked:', e); }
+
+      // ✅ Safely attempt to launch AR
+      if (modelViewer.canActivateAR) {
         try {
-          await modelViewer.activateAR();
+          modelViewer.activateAR();
         } catch (err) {
           console.error('AR activation failed:', err);
         }
-      });
-    }
-
-    modelViewer.addEventListener('ar-status', (event) => {
-      const status = event.detail.status;
-      if (status === 'presenting') {
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) arSound.pause();
-      } else if (status === 'not-presenting') {
-        if (isPlaying) {
-          arSound.play();
-          video.play();
-        }
+      } else {
+        alert('AR not supported in this browser. Try Chrome or Safari mobile.');
       }
     });
+  }
+
+  modelViewer.addEventListener('ar-status', (event) => {
+    const status = event.detail.status;
+    if (status === 'presenting') {
+      // Pause web audio on iOS Quick Look so baked audio can play
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) arSound.pause();
+    } else if (status === 'not-presenting') {
+      if (isPlaying) {
+        arSound.play();
+        video.play();
+      }
+    }
   });
-  </script>
+});
+</script>
 </body>
 </html>
