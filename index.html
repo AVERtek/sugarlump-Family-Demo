@@ -17,6 +17,11 @@
     </script>
 
     <style>
+        @font-face {
+            font-family: 'Chalet LondonNineteenEighty Regular';
+            src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
+        }
+
         html, body {
             margin: 0;
             padding: 0;
@@ -33,34 +38,40 @@
             max-width: 600px;
             width: 100%;
             box-sizing: border-box;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
         .card {
             background-color: #ffff99;
-            border: 2px solid #ffff99;
             padding: 10px;
-            margin: 0 0 1em 0;
+            margin-bottom: 1em;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            border-radius: 6px;
             position: relative;
+        }
+
+        .logo {
+            width: 350px;
+            max-width: 90%;
+            height: auto;
+            display: block;
+            margin: auto;
         }
 
         .viewer-container {
             width: 100%;
             height: 400px;
             position: relative;
+            background: #000;
+            border-radius: 6px;
+            overflow: hidden;
         }
 
         #myVideo {
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
             object-fit: cover;
             z-index: 2;
         }
@@ -75,15 +86,13 @@
         }
 
         #myModelViewer button[slot="ar-button"] {
-            opacity: 0;
-            pointer-events: none;
+            display: none;
         }
 
         .button-container {
-            margin-top: 30px;
+            margin: 30px 0;
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
             gap: 10px;
         }
 
@@ -96,9 +105,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 0 20px;
             cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .action-button:hover {
@@ -111,81 +120,76 @@
             color: #000099;
             font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
             white-space: nowrap;
+            font-weight: bold;
         }
 
-        @font-face {
+        .link-list h2 {
+            font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
+            color: #ff69b4;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .link-list a {
+            color: #59cbe8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-link {
             font-family: 'Chalet LondonNineteenEighty Regular';
-            src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
+            color: #59cbe8;
+            font-size: 14px;
+            margin-top: 20px;
         }
-
-        a { color: #59cbe8; text-decoration: none; font-weight: bold; }
-        .card h2 { margin: 0.5em 0; padding: 0; line-height: 1.2; }
-        .card h2 p { margin: 0; padding: 0; }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="card">
-            <img src="images/sugarlump_experience_AR_assets-01.png" alt="Logo" style="width: 350px; height: auto; display: block; margin: auto;">
+            <img src="images/sugarlump_experience_AR_assets-01.png" alt="Sugarlump Logo" class="logo">
         </div>
 
         <div class="card">
             <div class="viewer-container">
-                <video id="myVideo" loop muted playsinline style="width: 100%;" poster="images/Family Demo Poster.png">
+                <video id="myVideo" loop muted playsinline poster="images/Family Demo Poster.png">
                     <source src="Video/sugarlump_family_video.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <!--<model-viewer
-                    id="myModelViewer"
-                    src="Models/entire_family_99cm.glb?sound=Sound/sweet_neighbor_of_mine3.mp3"
-                    ios-src="Models/GIRL_converted.usdz"
-                    alt="A 3D model"
-                    ar
-                    ar-modes="scene-viewer webxr quick-look"
-                    camera-controls
-                    poster="images/Poster_SN_Scene.png"
-                    shadow-intensity="1"
-                    ar-scale="auto"
-                    ar-placement="floor"
-                    interaction-prompt="none"
-                    autoplay
-                    animation-name="Wave">
-                    <button slot="ar-button"></button>
-                    <audio slot="sound" src="Sound/sweet_neighbor_of_mine3.mp3" autoplay loop></audio>
-                </model-viewer> -->
+                
+                <model-viewer 
+                    id="myModelViewer" 
+                    src="Models/entire_family_99cm.glb" 
+                    ios-src="Models/GIRL_converted.usdz" 
+                    ar ar-modes="quick-look webxr scene-viewer" 
+                    style="display: none;">
+                </model-viewer>
             </div>
 
-            <div style="text-align: center;">
-                <p style="font-family: Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099;"> Make Sure Sound is On!</p>
-            </div>
-            
+            <p style="font-family: 'Chalet LondonNineteenEighty Regular'; font-weight: bold; color: #000099; margin-top: 15px;">
+                Make Sure Sound is On!
+            </p>
+
             <div class="button-container">
                 <div class="action-button" id="play-pause-button">
-                    <img id="play-pause-icon" src="images/play_icon.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Play/Pause Icon">
-                    <span class="action-button-text"><strong>Play</strong></span>
+                    <img id="play-pause-icon" src="images/play_icon.png" style="height: 40px; margin-right: 10px;" alt="Play">
+                    <span class="action-button-text">Play</span>
                 </div>
-                <!--<div class="action-button" id="ar-button">
-                    <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom AR Icon">
-                    <span class="action-button-text"><strong>AR Press Here</strong></span>
-                </div> -->
+                
+                </div>
+
+            <div class="link-list">
+                <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%; margin-bottom: 10px;">
+                <h2>why: <a href="https://sugarlump.love/" target="_blank">the kindness project</a></h2>
+                <h2>rewards: <a href="https://sugarlump.love/join-the-fun" target="_blank">local elementary schools</a></h2>
+                <h2>FAQ: <a href="https://sugarlump.love/faq" target="_blank">about sugarlump</a></h2>
+                <h2>no cost: <a href="https://sugarlump.love/contact" target="_blank">join sugarlump kindness club</a></h2>
             </div>
 
-             <!--<div class="card">
-        <h2 style="font-family:'Chalet LondonNineteenEighty Regular'; color: #000099;">Experience 4D Augmented Reality On Your Phone</h2>
-        <img src="images/erin_video_scenes-41.png" style="width: 100%; max-width: 350px;">
-        <h3 style="font-family:'Chalet LondonNineteenEighty Regular'; color: #000099; font-size: 14px;"><em>If AR button does not appear on mobile, use another browser.</em></h3>
-    </div> -->
-            <div class="card" style="margin-top: 20px;">
-                <img src="images/erin_video_scenes-34.png" style="width: 300px; max-width: 90%; margin-bottom: 10px;">
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>why:</b><a href="https://sugarlump.love/" target="_blank"> the kindness project</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>rewards:</b><a href="https://sugarlump.love/join-the-fun" target="_blank"> local elementary schools</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>FAQ:</b><a href="https://sugarlump.love/faq" target="_blank"> about sugarlump</a></p></h2>
-                <h2><p style="font-family:'Chalet LondonNineteenEighty Regular'; color: #ff69b4; font-size: 20px;"><b>no cost:</b><a href="https://sugarlump.love/contact" target="_blank"> join sugarlump kindness club</a></p></h2>           
+            <div class="footer-link">
+                <a href="https://avertek.net/" target="_blank">Contact AVERtek to learn more about AR marketing.</a>
             </div>
-            <div class="card" style="margin-top: 20px;">
-        <a href="https://avertek.net/" target="_blank"><p style="font-family:'Chalet LondonNineteenEighty Regular'; color:#59cbe8; font-size: 14px;">Contact AVERtek to learn more about AR marketing.</p></a>
-    </div>
         </div>
     </div>
 
@@ -196,19 +200,18 @@
             const playPauseButton = document.getElementById('play-pause-button');
             const playPauseIcon = document.getElementById('play-pause-icon');
             const arButton = document.getElementById('ar-button');
-            
-            // Setup the AR Audio
+            const btnText = playPauseButton.querySelector('.action-button-text');
+
             const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
             arSound.loop = true;
-
             let isPlaying = false;
 
-            // Unlock audio for mobile browsers on first interaction
+            // Audio Unlock
             const initAudio = () => {
                 arSound.play().then(() => {
                     arSound.pause();
                     arSound.currentTime = 0;
-                }).catch(e => console.log("Waiting for user interaction..."));
+                }).catch(e => console.log("Interaction required for audio"));
                 window.removeEventListener('touchstart', initAudio);
                 window.removeEventListener('click', initAudio);
             };
@@ -221,13 +224,13 @@
                     arSound.pause();
                     video.muted = true;
                     playPauseIcon.src = 'images/play_icon.png';
-                    playPauseButton.querySelector('strong').textContent = 'Play';
+                    btnText.textContent = 'Play';
                 } else {
                     video.muted = false;
                     video.play();
                     arSound.play();
                     playPauseIcon.src = 'images/pause_icon.png';
-                    playPauseButton.querySelector('strong').textContent = 'Pause';
+                    btnText.textContent = 'Pause';
                 }
                 isPlaying = !isPlaying;
             }
@@ -236,16 +239,14 @@
                 playPauseButton.addEventListener('click', togglePlayPause);
             }
 
-            if (arButton) {
+            // AR Activation Logic
+            if (arButton && modelViewer) {
                 arButton.addEventListener('click', () => {
                     video.pause();
                     video.muted = true;
                     isPlaying = false;
                     playPauseIcon.src = 'images/play_icon.png';
-                    if(playPauseButton) playPauseButton.querySelector('strong').textContent = 'Play';
-
-                    // Force sound to play for AR
-                    arSound.play().catch(err => console.error("Audio failed", err));
+                    btnText.textContent = 'Play';
 
                     if (modelViewer.canActivateAR) {
                         modelViewer.activateAR();
@@ -255,14 +256,16 @@
                 });
             }
 
-            // Sync audio with the AR session state
-            modelViewer.addEventListener('ar-status', (event) => {
-                if (event.detail.status === 'not-presenting') {
-                    arSound.pause();
-                } else if (event.detail.status === 'presenting') {
-                    arSound.play();
-                }
-            });
+            // Sync audio with AR session
+            if (modelViewer) {
+                modelViewer.addEventListener('ar-status', (event) => {
+                    if (event.detail.status === 'presenting') {
+                        arSound.play();
+                    } else {
+                        arSound.pause();
+                    }
+                });
+            }
         });
     </script>
 </body>
