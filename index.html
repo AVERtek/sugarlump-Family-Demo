@@ -127,10 +127,17 @@
             margin-top: 20px;
         }
 
-        h2 a {
-    text-decoration: underline;
-    color: inherit; /* This ensures the link stays the same color as the H2 text */
+       h2 a {
+    text-decoration: underline !important;
+    text-decoration-color: currentColor !important;
+    color: inherit;
 }
+
+/* Optional: Ensures the underline stays consistent when clicked or visited */
+h2 a:link, h2 a:visited {
+    text-decoration: underline !important;
+}
+        
     </style>
 </head>
 
