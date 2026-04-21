@@ -16,6 +16,18 @@
         gtag('config', '0-0000000000');
     </script>
 
+    <p>Ready to join? <span class="launch-text" onclick="showBanner()">It's easy to get started...</span></p>
+
+<style>
+.launch-text {
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    font-weight: bold;
+    cursor: pointer;
+    color: #007bff; /* Or inherit */
+}
+</style>
+    
     <style>
         @font-face {
             font-family: 'Chalet LondonNineteenEighty Regular';
@@ -246,17 +258,6 @@ h2 a:link, h2 a:visited {
     document.getElementById('popup-banner').style.display = 'flex';
 }
 
-            <p>Ready to join? <span class="launch-text" onclick="showBanner()">It's easy to get started...</span></p>
-
-<style>
-.launch-text {
-    text-decoration: underline;
-    text-decoration-color: currentColor;
-    font-weight: bold;
-    cursor: pointer;
-    color: #007bff; /* Or inherit */
-}
-</style>
             // Bind click to the entire video face
             wrapper.addEventListener('click', togglePlayPause);
 
