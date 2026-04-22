@@ -8,6 +8,7 @@
     <title>sugarlump-Family-Demo</title>
 
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=0-0000000000"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -83,24 +84,14 @@
         #myVideo {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Critical for iOS Fullscreen Landscape Fill */
             z-index: 2;
-        }
-
-        #myModelViewer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
         }
 
         #myModelViewer button[slot="ar-button"] {
             display: none;
         }
 
-        /* Link List Headers */
         .link-list h2 {
             font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
             color: #ff69b4;
@@ -108,35 +99,14 @@
             margin: 10px 0;
         }
 
-        .link-list a {
+        .link-list a, .launch-text {
             color: #59cbe8;
             text-decoration: underline !important;
-            text-decoration-color: currentColor !important;
             font-weight: bold;
-        }
-
-        h2 a {
-            text-decoration: underline !important;
-            text-decoration-color: currentColor !important;
-            color: inherit;
-        }
-
-        /* The Launch Trigger (Blue Link) */
-        .launch-text {
-            color: #59cbe8;
-            text-decoration: underline !important;
-            text-decoration-color: currentColor !important;
             cursor: pointer;
         }
 
-        .footer-link {
-            font-family: 'Chalet LondonNineteenEighty Regular';
-            color: #59cbe8;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-
-        /* FULLSCREEN BANNER STYLES */
+        /* --- FULLSCREEN BANNER STYLES --- */
         .banner-container {
             position: fixed;
             top: 0;
@@ -156,6 +126,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* iOS CSS Rotation Fallback for the Banner */
+        @media screen and (orientation: portrait) {
+            .banner-container.active-ios .banner-content {
+                transform: rotate(90deg);
+                width: 100vh;
+                height: 100vw;
+            }
         }
 
         .banner-bg {
@@ -185,6 +165,7 @@
 </head>
 
 <body>
+
     <div class="container">
         <div class="card">
             <img src="images/sugarlump_experience_AR_assets-01.png" alt="Sugarlump Logo" class="logo">
@@ -195,18 +176,10 @@
                 <div class="video-overlay" id="overlay-icon">
                     <img src="images/play_icon.png" style="width:80px;">
                 </div>
-                
                 <video id="myVideo" loop muted playsinline poster="images/Family Demo Poster.png">
                     <source src="Video/sugarlump_family_video.mp4" type="video/mp4">
                 </video>
-                
-                <model-viewer 
-                    id="myModelViewer" 
-                    src="Models/entire_family_99cm.glb" 
-                    ios-src="Models/GIRL_converted.usdz" 
-                    ar ar-modes="quick-look webxr scene-viewer" 
-                    style="display: none;">
-                </model-viewer>
+                <model-viewer id="myModelViewer" src="Models/entire_family_99cm.glb" ios-src="Models/GIRL_converted.usdz" ar ar-modes="quick-look webxr scene-viewer" style="display: none;"></model-viewer>
             </div>
 
             <p style="font-family: 'Chalet LondonNineteenEighty Regular'; font-weight: bold; color: #000099; margin-top: 15px;">
@@ -225,7 +198,7 @@
                 <span style="color: #ff69b4;">Spot a sugarlump sticker:</span> 
                 <span class="launch-text" onclick="launchFullscreenBanner()">this is all you do!</span>
             </p>
-            
+
             <div class="footer-link">
                 <a href="https://avertek.net/" target="_blank">Contact AVERtek to learn more about XR marketing.</a>
             </div>
@@ -240,79 +213,77 @@
     </div>
 
     <script>
+        const video = document.getElementById('myVideo');
+        const wrapper = document.getElementById('video-wrapper');
+        const overlay = document.getElementById('overlay-icon');
         const bannerContainer = document.getElementById('popup-banner');
+        const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
+        arSound.loop = true;
+        let isPlaying = false;
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         async function launchFullscreenBanner() {
             bannerContainer.style.display = 'flex';
+            bannerContainer.classList.add('active-ios');
             try {
-                if (bannerContainer.requestFullscreen) {
-                    await bannerContainer.requestFullscreen();
-                } else if (bannerContainer.webkitRequestFullscreen) {
-                    await bannerContainer.webkitRequestFullscreen();
-                }
+                if (bannerContainer.requestFullscreen) await bannerContainer.requestFullscreen();
+                else if (bannerContainer.webkitRequestFullscreen) await bannerContainer.webkitRequestFullscreen();
 
                 if (screen.orientation && screen.orientation.lock) {
-                    await screen.orientation.lock('landscape').catch(e => console.log("Orientation lock not supported."));
+                    await screen.orientation.lock('landscape').catch(() => {});
                 }
-            } catch (err) {
-                console.log("Fullscreen error:", err);
-            }
+            } catch (err) {}
         }
 
         function exitFullscreenBanner() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            }
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
             bannerContainer.style.display = 'none';
         }
 
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) bannerContainer.style.display = 'none';
-        });
-        document.addEventListener('webkitfullscreenchange', () => {
-            if (!document.webkitFullscreenElement) bannerContainer.style.display = 'none';
-        });
+        wrapper.addEventListener('click', async () => {
+            if (isPlaying) {
+                video.pause();
+                arSound.pause();
+                overlay.style.opacity = '1';
+                isPlaying = false;
+            } else {
+                // Unlock iOS Audio Handshake
+                video.muted = false;
+                const playPromise = video.play();
+                arSound.play();
 
-        // Video/AR Logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('myVideo');
-            const wrapper = document.getElementById('video-wrapper');
-            const overlay = document.getElementById('overlay-icon');
-            const arSound = new Audio('Sound/sweet_neighbor_of_mine3.mp3');
-            arSound.loop = true;
-            let isPlaying = false;
+                if (playPromise !== undefined) {
+                    playPromise.then(async () => {
+                        overlay.style.opacity = '0';
+                        isPlaying = true;
 
-            const initAudio = () => {
-                arSound.play().then(() => {
-                    arSound.pause();
-                    arSound.currentTime = 0;
-                }).catch(e => console.log("Unlock needed"));
-                window.removeEventListener('touchstart', initAudio);
-                window.removeEventListener('click', initAudio);
-            };
-            window.addEventListener('touchstart', initAudio);
-            window.addEventListener('click', initAudio);
-
-            wrapper.addEventListener('click', async () => {
-                if (isPlaying) {
-                    video.pause();
-                    arSound.pause();
-                    overlay.style.opacity = '1';
-                } else {
-                    try {
-                        if (wrapper.requestFullscreen) await wrapper.requestFullscreen();
-                        else if (wrapper.webkitRequestFullscreen) await wrapper.webkitRequestFullscreen();
-                    } catch (e) {}
-                    video.muted = false;
-                    video.play();
-                    arSound.play();
-                    overlay.style.opacity = '0';
+                        if (isIOS) {
+                            // Target Video Element for iOS Native Landscape Rotation
+                            if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+                            else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+                        } else {
+                            // Target Wrapper for Android Force Landscape
+                            if (wrapper.requestFullscreen) await wrapper.requestFullscreen();
+                            if (screen.orientation && screen.orientation.lock) {
+                                await screen.orientation.lock('landscape').catch(() => {});
+                            }
+                        }
+                    }).catch(e => console.log(e));
                 }
-                isPlaying = !isPlaying;
-            });
+            }
         });
+
+        // System Exits Cleanup
+        const cleanup = () => {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                bannerContainer.style.display = 'none';
+                bannerContainer.classList.remove('active-ios');
+            }
+        };
+        document.addEventListener('fullscreenchange', cleanup);
+        document.addEventListener('webkitfullscreenchange', cleanup);
     </script>
 </body>
 </html>
