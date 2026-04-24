@@ -84,11 +84,10 @@
         #myVideo {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Keeps landscape video filling the container */
+            object-fit: cover; 
             z-index: 2;
         }
 
-        /* Essential Model Viewer Styling */
         #myModelViewer {
             position: absolute;
             top: 0;
@@ -106,7 +105,8 @@
             font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
             color: #ff69b4;
             font-size: 20px;
-            margin: 10px 0;
+            /* ADJUSTED: Reduced vertical margin to bring lines closer */
+            margin: 5px 0;
         }
 
         .link-list a, .launch-text {
@@ -137,13 +137,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Note: Removed transform: rotate logic entirely */
         }
 
         .banner-bg {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain; /* Shows your full portrait banner */
+            object-fit: contain; 
         }
 
         .close-btn {
@@ -200,7 +199,8 @@
                 <h2>why: <a href="https://sugarlump.love/" target="_blank">the kindness project</a></h2>
                 <h2>rewards: <a href="https://sugarlump.love/join-the-fun" target="_blank">local elementary schools</a></h2>
                 <h2>faq: <a href="https://sugarlump.love/faq" target="_blank">about sugarlump</a></h2>
-                <p style="margin-top: 20px; font-family: 'Chalet LondonNineteenEighty Regular', sans-serif; font-size: 20px; font-weight: bold;">
+                
+                <p style="margin-top: 5px; font-family: 'Chalet LondonNineteenEighty Regular', sans-serif; font-size: 20px; font-weight: bold;">
                 <span style="color: #ff69b4;">find a sugarlump sticker:</span> 
                 <span class="launch-text" onclick="launchFullscreenBanner()">here's what to do!</span>
             </p>
@@ -240,7 +240,6 @@
                     await bannerContainer.webkitRequestFullscreen();
                 }
 
-                // Portait Lock for the Banner image specifically
                 if (screen.orientation && screen.orientation.lock) {
                     await screen.orientation.lock('portrait').catch(() => {});
                 }
@@ -253,7 +252,7 @@
             bannerContainer.style.display = 'none';
         }
 
-        // --- VIDEO LOGIC (LANDSCAPE SUPPORT RETAINED) ---
+        // --- VIDEO LOGIC ---
         wrapper.addEventListener('click', async () => {
             video.muted = false;
             if (isPlaying) {
@@ -272,10 +271,8 @@
                             isPlaying = true;
 
                             if (isIOS) {
-                                // iOS Video Handshake - Targets Video element
                                 if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
                             } else {
-                                // Android Landscape Lock for the Video content
                                 if (wrapper.requestFullscreen) await wrapper.requestFullscreen();
                                 if (screen.orientation && screen.orientation.lock) {
                                     await screen.orientation.lock('landscape').catch(() => {});
